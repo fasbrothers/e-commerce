@@ -1,0 +1,17 @@
+{%- for product in collection.products-%}
+  <div class="product">
+    {% if product.available %}
+      <span class="product__available">in stock </span>
+      {%- else -%}
+      <span class="product__not--available"> out stock </span>
+    {% endif %}
+    <a href="{{ product.url | within: collection }}">
+      <img src="{{ product.featured_image.src | img_url: 'large' }}" alt="{{ product.featured_image.alt | escape }}">
+    </a>
+    <a class="product__title" href="{{ product.url | within: collection }}">{{ product.title | truncate: 40  }}</a>
+    {%- if product.compare_at_price -%}
+      <p class="product__compare-price">{{ product.compare_at_price | money }}</p>
+      <p class="product__price">{{ product.price | money }}</p>
+    {%- endif -%}
+  </div>
+{%- endfor -%}

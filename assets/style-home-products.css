@@ -1,0 +1,18 @@
+.cards{
+  margin-top: 50px;
+}
+.cards__wrapper{
+  display: flex;
+  width: 100%;
+  margin-top: 25px;
+}
+.cards__header{
+  color: #000;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  margin-right: 26px;
+}
+.cards__header:hover{
+  border-bottom: 1px solid #0156ff;
+}

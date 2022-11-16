@@ -1,0 +1,36 @@
+{{ "style-header.css" | asset_url | stylesheet_tag }}
+{{ "style-home-products.css" | asset_url | stylesheet_tag }}
+
+<section class="cards">
+  <div class="container">
+    {%- for collection in collections -%}
+      <a class="cards__header" href="{{ collection.url | within: collections }}">
+        {{collection.title | capitalize}}
+      </a>
+    {%- endfor -%}
+    <div class="cards__wrapper">
+        <div class="card">
+          <a href="#">
+            <img src="{{section.settings.home-product-image | img_url: 'large'}}" alt="product">
+          </a>
+        </div>
+        {%- for collection in collections -%}
+            {%- if collection.handle == "new-arrival" -%}
+              {%- render 'single-product' collection: collection limit: 5 -%}
+            {%- endif -%}
+        {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{%- schema -%}
+{
+  "settings":[
+    {
+      "type": "image_picker",
+      "id": "home-product-image",
+      "label": "Product-image"
+    }
+  ]
+}
+{%- endschema -%}

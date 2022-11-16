@@ -1,0 +1,132 @@
+.header {
+  height: 82px;
+  border-bottom: 1px solid #CACDD8;
+}
+.header__wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.header__left {
+  display: flex;
+  align-items: center;
+}
+.header__nav-second {
+  display: none;
+}
+.header__logo {
+  margin-bottom: 5px;
+}
+.header__nav-item:hover .header__nav-second {
+  display: flex;
+  position: absolute;
+  width: 100%;
+  border: 1px solid #cacdd8;
+  border-top: none;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  margin-left: -120px;
+  margin-top: 5px;
+  background: #fff;
+}
+.header__nav {
+  display: flex;
+  margin: 0 26px 0 56px;
+}
+.header__nav-item,
+.header__nav-item li {
+  list-style: none;
+  padding-bottom: 5px;
+}
+.header__nav-link,
+.header__nav-item li a {
+  text-decoration: none;
+  color: #000;
+  font-size: 14px;
+  font-weight: 600;
+  margin-right: 25px;
+  text-transform: capitalize;
+}
+.header__left-btn {
+  width: 100px;
+  height: 30px;
+  background-color: transparent;
+  color: #0156ff;
+  border: 2px solid #0156ff;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: capitalize;
+  border-radius: 35px;
+  margin-bottom: 5px;
+}
+.header__right-icon {
+  text-decoration: none;
+  margin-left: 25px;
+}
+.header__nav-second-item {
+  padding: 10px 27px 13px 27px;
+}
+.header__nav-second-item a {
+  text-decoration: none;
+  color: #000;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: capitalize;
+  transition: 0.3s ease-in-out;
+}
+.header__nav-second-item:hover {
+  background-color: #f5f7ff;
+}
+.product {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 25%;
+  flex-direction: column;
+  margin: 26px 0;
+  text-align: center;
+}
+.header__nav-second-links {
+  width: 25%;
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+}
+.header__nav-second-products {
+  display: flex;
+  width: 75%;
+}
+.product__available {
+  color: #78a962;
+  text-align: left;
+  font-size: 10px;
+}
+.product__not--available {
+  color: #c94d3f;
+  font-size: 10px;
+  text-align: left;
+}
+.product__title {
+  color: #000;
+  font-size: 13px;
+  margin: 10px 0 15px 0;
+  text-decoration: none;
+}
+.product__price {
+  font-size: 14px;
+  font-weight: 600;
+}
+.product__compare-price {
+  font-size: 13px;
+  font-weight: 400;
+  text-decoration: line-through;
+  color: #666666;
+}
+.product{
+  transition: 0.3s ease-in-out;
+}
+.product:hover{
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  transform: scale(0.95);
+}
+.product__description{
+  width: 50%;
+}

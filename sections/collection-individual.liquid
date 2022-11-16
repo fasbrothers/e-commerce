@@ -1,0 +1,135 @@
+{{ "style-collection.css" | asset_url | stylesheet_tag }}
+{% paginate collection.products by 20 %}
+<div class="collection container">
+  <h1 class="collection__title">{{ collection.title | upcase }}</h1>
+  <div class="collection__top">
+    <div class="collection__sort">
+      {%- render 'sortByProducts' -%}
+    </div>
+    {%- assign limit = 5 -%}
+    {%- capture contentForQuerystring -%}{{ content_for_header }}{%- endcapture -%}
+    {%- assign pageUrl = contentForQuerystring | split:'"pageurl":"' | last | split:'"' | first | split:'.myshopify.com' | last | replace:'\/','/' | replace:'%20',' ' | replace:'\u0026','&' -%}
+    {%- for i in (1..1) -%}
+      {%- unless pageUrl contains "?" -%}{% break %}{%- endunless -%}
+      {%- if pageUrl contains "view=3" -%}{%- assign limit = 3 -%}{%- endif -%}
+        {%- if pageUrl contains "view=5" -%}{%- assign limit = 5 -%}{%- endif -%}
+        {%- if pageUrl contains "view=8" -%}{%- assign limit = 8 -%}{%- endif -%}
+        {%- if pageUrl contains "view=10" -%}{%- assign limit = 10 -%}{%- endif -%}
+    {%- endfor -%}
+    <div class="sort-per-page">
+      <label for="sel1">Show:</label>
+      <select id="sel1" class="num">
+        <option value="/collections/{{ collection.handle }}?view=3" {% if limit == 3 %}selected="selected"{% endif %}>3 per page</option>
+        <option value="/collections/{{ collection.handle }}?view=5" {% if limit == 5 %}selected="selected"{% endif %}>5 per page</option>
+        <option value="/collections/{{ collection.handle }}?view=8" {% if limit == 8 %}selected="selected"{% endif %}>8 per page</option>
+        <option value="/collections/{{ collection.handle }}?view=10" {% if limit == 10 %}selected="selected"{% endif %}>10 per page</option>
+      </select>
+    </div>
+  
+    <button class="btn__square">
+      {%- render 'square' -%}
+    </button>
+    <button class="btn__single">
+      {%- render 'single' -%}
+    </button>
+  </div>
+  <div class="active-filters">
+    {%- for filter in collection.filters -%}
+      {%- if filter.type == "price_range" -%}
+        {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+          <div class="active__filter">
+            <p class="active-filters__remove-filter" >
+              {%- assign min_value = filter.min_value.value | default: 0 -%}
+              {%- assign max_value = filter.max_value.value | default: filter.range_max -%}
+              {{ min_value | money }} - {{ max_value | money }} 
+            </p>
+            <a href="{{ filter.url_to_remove }}">{%- render 'cancel' -%}</a>
+          </div>
+        {%- endif -%}
+      {%- else -%}
+        {%- for filter_value in filter.active_values -%}
+          <div class="active__filter">
+            <p class="active-filters__remove-filter">
+              {{ filter_value.label }} 
+            </p>
+            <a href="{{ filter_value.url_to_remove }}">{%- render 'cancel' -%}</a>
+          </div>
+        {%- endfor -%}
+      {%- endif- %}
+    {%- endfor -%}
+    <a href="{{ collection.url }}?sort_by={{ collection.sort_by }}" class="active-filters__clear">Clear All</a>
+  </div>
+  <div class=" collection__wrapper">
+    <div class="collection__filter">
+      {%- render 'collection-filter' -%}
+    </div>
+    <div class="collection__products">
+      {% paginate collection.products by limit %}
+      {% for product in collection.products %}
+        <div class="product product__square">
+          {% if product.available %}
+            <span class="product__available">in stock </span>
+            {%- else -%}
+            <span class="product__not--available"> out stock </span>
+          {% endif %}
+          <a href="{{ product.url | within: collection }}">
+            <img src="{{ product.featured_image.src | img_url: 'large' }}" alt="{{ product.featured_image.alt | escape }}">
+          </a>
+          <a class="product__title" href="{{ product.url | within: collection }}">{{ product.title | truncate: 40  }}</a>
+          {%- if product.compare_at_price -%}
+            <p class="product__compare-price">{{ product.compare_at_price | money }}</p>
+            <p class="product__price">{{ product.price | money }}</p>
+          {%- endif -%}
+        </div>
+        <div class="product product__individual none">
+          <div class="product__media">
+            <a href="{{ product.url | within: collection }}">
+              <img src="{{ product.featured_image.src | img_url: 'large' }}" alt="{{ product.featured_image.alt | escape }}">
+            </a>
+          </div>
+          <div class="product__description">
+            <a class="product__title" href="{{ product.url | within: collection }}">{{ product.title | truncate: 40  }}</a>
+            <p>{{product.description | truncate: 200}}</p>
+            {%- if product.compare_at_price -%}
+              <p class="product__compare-price">{{ product.compare_at_price | money }}</p>
+              <p class="product__price">{{ product.price | money }}</p>
+            {%- endif -%}
+          </div>
+        </div>
+      {% else %}
+        <p>no matches</p>
+      {% endfor %}
+      {% if paginate.pages > 1 %}
+        {{ paginate | default_pagination }}
+      {% endif %}
+      {% endpaginate %}
+    </div>
+  </div>
+</div>
+{% endpaginate %}
+
+<script>
+  document.querySelector(".collection__top").addEventListener("click", (e)=>{
+    if(e.target.classList.contains("btn__square")){
+      document.querySelector(".collection__products").classList.remove("flex")
+      document.querySelectorAll(".product__individual").forEach((item)=>{
+        item.classList.add("none")
+      })
+      document.querySelectorAll(".product__square").forEach((item)=>{
+        item.classList.remove("none")
+      })
+    }
+    if(e.target.classList.contains("btn__single")){
+      document.querySelector(".collection__products").classList.add("flex")
+      document.querySelectorAll(".product__square").forEach((item)=>{
+        item.classList.add("none")
+      })
+      document.querySelectorAll(".product__individual").forEach((item)=>{
+        item.classList.remove("none")
+      })
+    }
+  })
+    document.querySelector('.sort-per-page select.num').addEventListener('change', function(e){
+      window.location.replace(e.target.value);
+    });
+</script>
